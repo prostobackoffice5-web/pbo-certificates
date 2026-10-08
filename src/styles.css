@@ -5,8 +5,8 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: #eef0ef;
-  color: #1f2a24;
+  background: #050507;
+  color: #e6e6ee;
 }
 
 .page {
@@ -25,18 +25,18 @@ body {
 .page__header h1 {
   font-size: 26px;
   margin: 0 0 8px;
-  color: #0f3d2e;
+  color: #ffffff;
 }
 
 .page__header p {
   margin: 0;
-  color: #5c6760;
+  color: #9c9cae;
 }
 
 .card {
-  background: #fff;
+  background: #14141e;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(15, 61, 46, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   padding: 32px;
   max-width: 420px;
   width: 100%;
@@ -45,17 +45,19 @@ body {
 .card label {
   display: block;
   font-size: 14px;
-  color: #3a4540;
+  color: #c3c3d2;
   margin-bottom: 6px;
 }
 
 .card input {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #d3d9d6;
+  border: 1px solid #2c2c3a;
   border-radius: 8px;
   font-size: 15px;
   margin-bottom: 16px;
+  background: #0e1116;
+  color: #ffffff;
 }
 
 .card button {
@@ -63,7 +65,7 @@ body {
   padding: 12px;
   border: none;
   border-radius: 8px;
-  background: #0f3d2e;
+  background: linear-gradient(90deg, #2de2c6, #8a3bff);
   color: #fff;
   font-size: 15px;
   cursor: pointer;
@@ -90,148 +92,209 @@ body {
   text-align: center;
 }
 
-/* Certificate */
+/* Certificate — dark branded design */
 
 .certificate {
   position: relative;
-  width: 1123px;
-  height: 794px;
+  width: 1200px;
+  height: 740px;
   max-width: 100%;
-  aspect-ratio: 297 / 210;
-  background: #faf8f3;
-  font-family: Georgia, 'Times New Roman', serif;
+  aspect-ratio: 1200 / 740;
+  background-color: #0e1116;
+  background-image: url('/cert/bg@2x.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 22px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
   overflow: hidden;
+  font-family: 'Fira Sans Condensed', Arial, sans-serif;
 }
 
-.certificate__border-outer {
+.certificate__left-fade {
   position: absolute;
-  inset: 32px;
-  border: 5px solid #0f3d2e;
-}
-
-.certificate__border-inner {
-  position: absolute;
-  inset: 44px;
-  border: 1.5px solid #c9a24b;
-}
-
-.certificate__seal {
-  position: absolute;
-  top: 190px;
-  right: 128px;
-  width: 104px;
-  height: 104px;
-  border: 2.5px solid #c9a24b;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  font-family: Arial, sans-serif;
-  font-size: 11px;
-  color: #c9a24b;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  text-align: center;
-  transform: rotate(-12deg);
-  opacity: 0.85;
-  line-height: 1.4;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    #0e1116 0%,
+    #0e1116 40%,
+    rgba(14, 17, 22, 0.75) 50%,
+    rgba(14, 17, 22, 0) 62%
+  );
 }
 
 .certificate__content {
   position: relative;
+  z-index: 2;
+  width: 620px;
   height: 100%;
+  padding: 40px 0 36px 56px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 80px 112px;
+  justify-content: space-between;
 }
 
 .certificate__brand {
-  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.certificate__brand img {
+  height: 30px;
+}
+
+.certificate__eyebrow {
+  color: #fdbb11;
+  font-family: 'Manrope', Arial, sans-serif;
+  font-size: 11.5px;
   letter-spacing: 3px;
-  color: #0f3d2e;
   text-transform: uppercase;
-  font-family: Arial, sans-serif;
-  margin-bottom: 20px;
+  font-weight: 800;
+  margin-bottom: 8px;
 }
 
 .certificate__title {
-  font-size: 42px;
-  letter-spacing: 6px;
-  color: #0f3d2e;
-  text-transform: uppercase;
-  margin: 0 0 10px;
-  font-weight: bold;
-}
-
-.certificate__subtitle {
-  font-size: 15px;
-  color: #6b6456;
-  font-family: Arial, sans-serif;
-  margin-bottom: 36px;
+  color: #ffffff;
+  font-family: 'Golos Text', Arial, sans-serif;
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+  line-height: 1.04;
+  margin: 0;
 }
 
 .certificate__lead {
-  font-size: 16px;
-  color: #3a3730;
-  font-family: Arial, sans-serif;
-  margin-bottom: 10px;
+  color: #9c9cae;
+  font-family: 'Manrope', Arial, sans-serif;
+  font-size: 11.5px;
+  margin-bottom: 2px;
 }
 
 .certificate__name {
-  font-size: 38px;
-  color: #0f3d2e;
-  margin: 6px 0 28px;
-  font-weight: bold;
-  border-bottom: 2px solid #c9a24b;
-  padding-bottom: 10px;
+  color: #ffffff;
+  font-family: 'Caveat', cursive;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
   display: inline-block;
-  min-width: 420px;
+  max-width: 460px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid;
+  border-image: linear-gradient(90deg, #2de2c6, #8a3bff, #ec3f68) 1;
 }
 
-.certificate__course {
-  font-size: 26px;
-  color: #0f3d2e;
-  font-style: italic;
-  margin: 6px 0 0;
+.certificate__role {
+  margin-top: 8px;
+  max-width: 440px;
+  color: #7a7a90;
+  font-family: 'Manrope', Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.certificate__body-text {
+  color: #c3c3d2;
+  font-family: 'Fira Sans Condensed', Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  max-width: 480px;
+  margin-bottom: 9px;
+}
+
+.certificate__bullets {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  max-width: 480px;
+}
+
+.certificate__bullets li {
+  color: #d1d1de;
+  font-family: 'Fira Sans Condensed', Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 4px;
+  padding-left: 14px;
+  position: relative;
+}
+
+.certificate__bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2de2c6, #8a3bff);
 }
 
 .certificate__footer {
-  position: absolute;
-  bottom: 64px;
-  left: 112px;
-  right: 112px;
   display: flex;
-  justify-content: space-between;
+  gap: 34px;
   align-items: flex-end;
-  font-family: Arial, sans-serif;
 }
 
-.certificate__footer-block {
-  text-align: left;
-  font-size: 13px;
-  color: #3a3730;
-}
-
-.certificate__label {
-  color: #8a8372;
-  font-size: 10px;
+.certificate__footer-label {
+  color: #70708a;
+  font-family: 'Manrope', Arial, sans-serif;
+  font-size: 8.5px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
+  margin-bottom: 4px;
 }
 
-.certificate__value {
-  font-size: 15px;
-  color: #0f3d2e;
-  margin-top: 4px;
+.certificate__footer-value {
+  color: #ffffff;
+  font-family: 'Manrope', Arial, sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
 }
 
-.certificate__qr {
-  width: 64px;
-  height: 64px;
+.certificate__qr-block {
+  position: absolute;
+  right: 50px;
+  bottom: 40px;
+  z-index: 3;
+  width: 96px;
+}
+
+.certificate__qr-frame {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  padding: 10px;
+  background: rgba(8, 10, 14, 0.88);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.certificate__qr-frame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.certificate__qr-corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: #2de2c6;
+}
+
+.certificate__qr-corner.tl { top: 0; left: 0; border-top: 2px solid; border-left: 2px solid; }
+.certificate__qr-corner.tr { top: 0; right: 0; border-top: 2px solid; border-right: 2px solid; }
+.certificate__qr-corner.bl { bottom: 0; left: 0; border-bottom: 2px solid; border-left: 2px solid; }
+.certificate__qr-corner.br { bottom: 0; right: 0; border-bottom: 2px solid; border-right: 2px solid; }
+
+.certificate__qr-caption {
+  margin-top: 6px;
+  font-family: 'Manrope', Arial, sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  color: #7a7a90;
+  text-align: center;
 }
 
 .certificate-wrap {
@@ -256,12 +319,12 @@ body {
   font-size: 15px;
   cursor: pointer;
   text-decoration: none;
-  background: #0f3d2e;
+  background: linear-gradient(90deg, #2de2c6, #8a3bff);
   color: #fff;
 }
 
 .actions .secondary {
-  background: #fff;
-  color: #0f3d2e;
-  border: 1px solid #0f3d2e;
+  background: transparent;
+  color: #e6e6ee;
+  border: 1px solid #3a3a4a;
 }

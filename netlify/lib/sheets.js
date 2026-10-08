@@ -15,9 +15,23 @@ const HEADERS = [
   'status',
 ]
 
-function rowToCertificate(row) {
+const BLOCK_SHEET_NAME = 'Сертификаты_Блоков'
+const BLOCK_HEADERS = [
+  'certificate_number',
+  'certificate_id',
+  'user_id',
+  'email',
+  'ФИО',
+  'block_key',
+  'block_title',
+  'completed_at',
+  'issued_at',
+  'status',
+]
+
+function rowToObject(row, headers) {
   const obj = {}
-  HEADERS.forEach((key, i) => {
+  headers.forEach((key, i) => {
     obj[key] = row[i] ?? ''
   })
   return obj
@@ -35,21 +49,70 @@ async function getSheetsClient() {
   return google.sheets({ version: 'v4', auth })
 }
 
-async function readAllCertificates(sheets, spreadsheetId) {
+async function readAll(sheets, spreadsheetId, sheetName, headers) {
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: `${SHEET_NAME}!A2:J`,
+    range: `${sheetName}!A2:J`,
   })
   const rows = res.data.values || []
-  return rows.filter((r) => r.length > 0).map(rowToCertificate)
+  return rows.filter((r) => r.length > 0).map((r) => rowToObject(r, headers))
+}
+
+async function ensureBlockSheetExists(sheets, spreadsheetId) {
+  const meta = await sheets.spreadsheets.get({ spreadsheetId })
+  const exists = meta.data.sheets.some((s) => s.properties.title === BLOCK_SHEET_NAME)
+  if (exists) return
+
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: { requests: [{ addSheet: { properties: { title: BLOCK_SHEET_NAME } } }] },
+  })
+  await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range: `${BLOCK_SHEET_NAME}!A1`,
+    valueInputOption: 'RAW',
+    requestBody: { values: [BLOCK_HEADERS] },
+  })
 }
 
 export async function getCertificateById(certificateId) {
   const spreadsheetId = process.env.SPREADSHEET_ID
   if (!spreadsheetId) throw new Error('SPREADSHEET_ID is not set')
   const sheets = await getSheetsClient()
-  const all = await readAllCertificates(sheets, spreadsheetId)
-  return all.find((c) => c.certificate_id === certificateId) || null
+
+  const courseCerts = await readAll(sheets, spreadsheetId, SHEET_NAME, HEADERS)
+  const courseMatch = courseCerts.find((c) => c.certificate_id === certificateId)
+  if (courseMatch) {
+    return {
+      kind: 'course',
+      certificate_number: courseMatch.certificate_number,
+      certificate_id: courseMatch.certificate_id,
+      ФИО: courseMatch.ФИО,
+      title_line: courseMatch.course_title,
+      completed_at: courseMatch.completed_at,
+      issued_at: courseMatch.issued_at,
+      status: courseMatch.status,
+    }
+  }
+
+  await ensureBlockSheetExists(sheets, spreadsheetId)
+  const blockCerts = await readAll(sheets, spreadsheetId, BLOCK_SHEET_NAME, BLOCK_HEADERS)
+  const blockMatch = blockCerts.find((c) => c.certificate_id === certificateId)
+  if (blockMatch) {
+    return {
+      kind: 'block',
+      certificate_number: blockMatch.certificate_number,
+      certificate_id: blockMatch.certificate_id,
+      ФИО: blockMatch.ФИО,
+      title_line: blockMatch.block_title,
+      block_key: blockMatch.block_key,
+      completed_at: blockMatch.completed_at,
+      issued_at: blockMatch.issued_at,
+      status: blockMatch.status,
+    }
+  }
+
+  return null
 }
 
 // One certificate per (user_id, course_id). Returns the existing one if
@@ -59,7 +122,7 @@ export async function getOrCreateCertificate({ userId, email, fio, courseId, cou
   if (!spreadsheetId) throw new Error('SPREADSHEET_ID is not set')
   const sheets = await getSheetsClient()
 
-  const all = await readAllCertificates(sheets, spreadsheetId)
+  const all = await readAll(sheets, spreadsheetId, SHEET_NAME, HEADERS)
   const existing = all.find((c) => c.user_id === userId && c.course_id === courseId)
   if (existing) return existing
 
@@ -83,6 +146,44 @@ export async function getOrCreateCertificate({ userId, email, fio, courseId, cou
     range: `${SHEET_NAME}!A2`,
     valueInputOption: 'RAW',
     requestBody: { values: [HEADERS.map((h) => certificate[h])] },
+  })
+
+  return certificate
+}
+
+// One certificate per (user_id, block_key). Returns the existing one if
+// already issued, otherwise creates and appends a new row.
+export async function getOrCreateBlockCertificate({ userId, email, fio, blockKey, blockTitle, numberPrefix, completedAt }) {
+  const spreadsheetId = process.env.SPREADSHEET_ID
+  if (!spreadsheetId) throw new Error('SPREADSHEET_ID is not set')
+  const sheets = await getSheetsClient()
+
+  await ensureBlockSheetExists(sheets, spreadsheetId)
+  const all = await readAll(sheets, spreadsheetId, BLOCK_SHEET_NAME, BLOCK_HEADERS)
+  const existing = all.find((c) => c.user_id === userId && c.block_key === blockKey)
+  if (existing) return existing
+
+  const year = new Date().getFullYear()
+  const sameBlock = all.filter((c) => c.block_key === blockKey)
+  const seq = String(sameBlock.length + 1).padStart(4, '0')
+  const certificate = {
+    certificate_number: `${numberPrefix.replace('{year}', String(year))}${seq}`,
+    certificate_id: randomUUID(),
+    user_id: userId,
+    email,
+    ФИО: fio,
+    block_key: blockKey,
+    block_title: blockTitle,
+    completed_at: completedAt || '',
+    issued_at: new Date().toISOString(),
+    status: 'Действителен',
+  }
+
+  await sheets.spreadsheets.values.append({
+    spreadsheetId,
+    range: `${BLOCK_SHEET_NAME}!A2`,
+    valueInputOption: 'RAW',
+    requestBody: { values: [BLOCK_HEADERS.map((h) => certificate[h])] },
   })
 
   return certificate

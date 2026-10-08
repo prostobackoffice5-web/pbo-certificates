@@ -37,7 +37,7 @@ export default function CertificatePage({ certificateId }: { certificateId: stri
     setDownloading(true)
     try {
       const [{ default: html2canvas }, { jsPDF }] = await Promise.all([import('html2canvas'), import('jspdf')])
-      const canvas = await html2canvas(cardRef.current, { scale: 2, backgroundColor: '#faf8f3' })
+      const canvas = await html2canvas(cardRef.current, { scale: 2, backgroundColor: '#0e1116' })
       const img = canvas.toDataURL('image/png')
       const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [canvas.width, canvas.height] })
       pdf.addImage(img, 'PNG', 0, 0, canvas.width, canvas.height)
@@ -94,7 +94,7 @@ export default function CertificatePage({ certificateId }: { certificateId: stri
     <div className="page">
       <div className="page__header">
         <h1>Поздравляем!</h1>
-        <p>Вы успешно завершили демо-курс «{data.course_title}».</p>
+        <p>{data.title_line}</p>
       </div>
 
       <div className="certificate-wrap">
@@ -113,7 +113,7 @@ export default function CertificatePage({ certificateId }: { certificateId: stri
       {shareMsg && <div className="card__meta">{shareMsg}</div>}
 
       <div className="card__meta" style={{ marginTop: 24 }}>
-        {data.ФИО} · {data.course_title} · выдан {new Date(data.issued_at).toLocaleDateString('ru-RU')} · № {data.certificate_number}
+        {data.ФИО} · {data.title_line} · выдан {new Date(data.issued_at).toLocaleDateString('ru-RU')} · № {data.certificate_number}
       </div>
     </div>
   )

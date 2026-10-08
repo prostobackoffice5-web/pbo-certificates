@@ -23,10 +23,12 @@ export default async (req) => {
   // Public-facing payload only — no email beyond what's needed to display.
   return json({
     certificate: {
+      kind: certificate.kind,
       certificate_number: certificate.certificate_number,
       certificate_id: certificate.certificate_id,
       ФИО: certificate.ФИО,
-      course_title: certificate.course_title,
+      title_line: certificate.title_line,
+      block_key: certificate.block_key || null,
       completed_at: certificate.completed_at,
       issued_at: certificate.issued_at,
       status: certificate.status,
