@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useState } from 'react'
 import QRCode from 'qrcode'
 import { BLOCKS } from './blocks'
+import CertificateBlob from './CertificateBlob'
 
 export interface CertificateData {
   kind: 'course' | 'block'
@@ -33,7 +34,7 @@ const CertificateCard = forwardRef<HTMLDivElement, { data: CertificateData }>(({
 
   useEffect(() => {
     const url = `${window.location.origin}/certificate/${data.certificate_id}`
-    QRCode.toDataURL(url, { margin: 1, width: 300, color: { dark: '#2de2c6', light: '#00000000' } })
+    QRCode.toDataURL(url, { margin: 1, width: 300, color: { dark: '#2dabd4', light: '#00000000' } })
       .then(setQr)
       .catch(() => setQr(null))
   }, [data.certificate_id])
@@ -45,7 +46,7 @@ const CertificateCard = forwardRef<HTMLDivElement, { data: CertificateData }>(({
 
   return (
     <div className="certificate" ref={ref}>
-      <div className="certificate__left-fade" />
+      <CertificateBlob />
 
       <div className="certificate__content">
         <div className="certificate__brand">
