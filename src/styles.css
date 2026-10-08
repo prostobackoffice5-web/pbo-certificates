@@ -65,7 +65,7 @@ body {
   padding: 12px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(90deg, #23a3ec, #6aca4f);
+  background: linear-gradient(90deg, #2de2c6, #8a3bff);
   color: #fff;
   font-size: 15px;
   cursor: pointer;
@@ -100,65 +100,27 @@ body {
   height: 740px;
   max-width: 100%;
   aspect-ratio: 1200 / 740;
-  background-color: #0b0b12;
+  background-color: #0e1116;
+  background-image: url('/cert/bg@2x.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
   border-radius: 22px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   font-family: 'Fira Sans Condensed', Arial, sans-serif;
 }
 
-/* Vector blob background — SVG, stays crisp at any zoom/print size */
-
-.certificate__blob-wrap {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 700px;
-  height: 620px;
-  overflow: hidden;
-}
-
-.certificate__blob-svg {
-  position: absolute;
-  top: -40px;
-  left: -40px;
-  width: 780px;
-  height: 680px;
-}
-
-.certificate__blob-fade {
+.certificate__left-fade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(200deg, transparent 38%, #0b0b12 90%), linear-gradient(0deg, #0b0b12 0%, transparent 32%);
-}
-
-.certificate__accents {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.certificate__dash {
-  position: absolute;
-  border-top: 3px solid;
-}
-
-.certificate__sq {
-  position: absolute;
-}
-
-.certificate__dot {
-  position: absolute;
-  border-radius: 50%;
-}
-
-.certificate__grain {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 3px 3px;
-  opacity: 0.3;
-  mix-blend-mode: overlay;
+  background: linear-gradient(
+    90deg,
+    #0e1116 0%,
+    #0e1116 40%,
+    rgba(14, 17, 22, 0.75) 50%,
+    rgba(14, 17, 22, 0) 62%
+  );
 }
 
 .certificate__content {
@@ -218,7 +180,7 @@ body {
   max-width: 460px;
   padding-bottom: 8px;
   border-bottom: 2px solid;
-  border-image: linear-gradient(90deg, #23a3ec, #6aca4f, #c539a2) 1;
+  border-image: linear-gradient(90deg, #2de2c6, #8a3bff, #ec3f68) 1;
 }
 
 .certificate__role {
@@ -265,7 +227,7 @@ body {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #23a3ec, #6aca4f);
+  background: linear-gradient(135deg, #2de2c6, #8a3bff);
 }
 
 .certificate__footer {
@@ -318,7 +280,7 @@ body {
   position: absolute;
   width: 16px;
   height: 16px;
-  border-color: #2dabd4;
+  border-color: #2de2c6;
 }
 
 .certificate__qr-corner.tl { top: 0; left: 0; border-top: 2px solid; border-left: 2px solid; }
@@ -357,7 +319,7 @@ body {
   font-size: 15px;
   cursor: pointer;
   text-decoration: none;
-  background: linear-gradient(90deg, #23a3ec, #6aca4f);
+  background: linear-gradient(90deg, #2de2c6, #8a3bff);
   color: #fff;
 }
 
