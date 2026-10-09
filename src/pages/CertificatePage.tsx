@@ -57,9 +57,9 @@ export default function CertificatePage({ certificateId }: { certificateId: stri
           if (inner) inner.style.transform = 'none'
         },
       })
-      const img = canvas.toDataURL('image/png')
+      const img = canvas.toDataURL('image/jpeg', 0.95)
       const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [canvas.width, canvas.height] })
-      pdf.addImage(img, 'PNG', 0, 0, canvas.width, canvas.height)
+      pdf.addImage(img, 'JPEG', 0, 0, canvas.width, canvas.height)
       const safeName = state.data.ФИО.replace(/\s+/g, '_')
       pdf.save(`Сертификат_${safeName}.pdf`)
     } finally {
