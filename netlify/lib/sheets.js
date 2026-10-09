@@ -75,6 +75,18 @@ async function ensureBlockSheetExists(sheets, spreadsheetId) {
   })
 }
 
+
+async function refreshName(sheets, spreadsheetId, sheetName, rowIndex, existing, fio) {
+  if (!fio || existing.ФИО === fio) return existing
+  await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range: `${sheetName}!E${rowIndex + 2}`,
+    valueInputOption: 'RAW',
+    requestBody: { values: [[fio]] },
+  })
+  return { ...existing, ФИО: fio }
+}
+
 export async function getCertificateById(certificateId) {
   const spreadsheetId = process.env.SPREADSHEET_ID
   if (!spreadsheetId) throw new Error('SPREADSHEET_ID is not set')
@@ -123,8 +135,8 @@ export async function getOrCreateCertificate({ userId, email, fio, courseId, cou
   const sheets = await getSheetsClient()
 
   const all = await readAll(sheets, spreadsheetId, SHEET_NAME, HEADERS)
-  const existing = all.find((c) => c.user_id === userId && c.course_id === courseId)
-  if (existing) return existing
+  const idx = all.findIndex((c) => c.user_id === userId && c.course_id === courseId)
+  if (idx !== -1) return refreshName(sheets, spreadsheetId, SHEET_NAME, idx, all[idx], fio)
 
   const year = new Date().getFullYear()
   const seq = String(all.length + 1).padStart(6, '0')
@@ -160,8 +172,8 @@ export async function getOrCreateBlockCertificate({ userId, email, fio, blockKey
 
   await ensureBlockSheetExists(sheets, spreadsheetId)
   const all = await readAll(sheets, spreadsheetId, BLOCK_SHEET_NAME, BLOCK_HEADERS)
-  const existing = all.find((c) => c.user_id === userId && c.block_key === blockKey)
-  if (existing) return existing
+  const idx = all.findIndex((c) => c.user_id === userId && c.block_key === blockKey)
+  if (idx !== -1) return refreshName(sheets, spreadsheetId, BLOCK_SHEET_NAME, idx, all[idx], fio)
 
   const year = new Date().getFullYear()
   const sameBlock = all.filter((c) => c.block_key === blockKey)
