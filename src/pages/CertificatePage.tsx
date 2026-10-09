@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import CertificateCard, { CertificateData } from '../CertificateCard'
 
 type State =
@@ -11,6 +11,18 @@ export default function CertificatePage({ certificateId }: { certificateId: stri
   const [downloading, setDownloading] = useState(false)
   const [shareMsg, setShareMsg] = useState<string | null>(null)
   const cardRef = useRef<HTMLDivElement>(null)
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(1)
+
+  useLayoutEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    const update = () => setScale(Math.min(1, el.clientWidth / 1200))
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [state.status])
 
   useEffect(() => {
     let cancelled = false
@@ -37,7 +49,14 @@ export default function CertificatePage({ certificateId }: { certificateId: stri
     setDownloading(true)
     try {
       const [{ default: html2canvas }, { jsPDF }] = await Promise.all([import('html2canvas'), import('jspdf')])
-      const canvas = await html2canvas(cardRef.current, { scale: 2, backgroundColor: '#0e1116' })
+      const canvas = await html2canvas(cardRef.current, {
+        scale: 2,
+        backgroundColor: '#0e1116',
+        onclone: (doc) => {
+          const inner = doc.querySelector<HTMLElement>('[data-cert-scaler]')
+          if (inner) inner.style.transform = 'none'
+        },
+      })
       const img = canvas.toDataURL('image/png')
       const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [canvas.width, canvas.height] })
       pdf.addImage(img, 'PNG', 0, 0, canvas.width, canvas.height)
@@ -97,9 +116,20 @@ export default function CertificatePage({ certificateId }: { certificateId: stri
         <p>{data.title_line}</p>
       </div>
 
-      <div className="certificate-wrap">
-        <CertificateCard data={data} ref={cardRef} />
+      <div className="certificate-wrap" ref={wrapRef} style={{ height: 740 * scale }}>
+        <div
+          data-cert-scaler
+          style={{ width: 1200, transform: `scale(${scale})`, transformOrigin: 'top left' }}
+        >
+          <CertificateCard data={data} ref={cardRef} />
+        </div>
       </div>
+
+      {scale < 0.6 && (
+        <div className="card__meta" style={{ marginTop: 0, marginBottom: 16 }}>
+          На телефоне текст мелкий — скачайте PDF, чтобы прочитать сертификат целиком.
+        </div>
+      )}
 
       <div className="actions">
         <button onClick={handleDownload} disabled={downloading}>

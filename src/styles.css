@@ -98,8 +98,6 @@ body {
   position: relative;
   width: 1200px;
   height: 740px;
-  max-width: 100%;
-  aspect-ratio: 1200 / 740;
   background-color: #0e1116;
   background-image: url('/cert/bg@2x.png');
   background-position: center center;
@@ -299,8 +297,8 @@ body {
 
 .certificate-wrap {
   width: 100%;
-  max-width: 900px;
-  overflow-x: auto;
+  max-width: 1200px;
+  overflow: hidden;
   margin-bottom: 20px;
 }
 
